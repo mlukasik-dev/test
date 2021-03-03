@@ -1,4 +1,4 @@
 build:
-	go build -o main cmd/api/*
+	go build -o api cmd/api/*
 
 .PHONY: build
