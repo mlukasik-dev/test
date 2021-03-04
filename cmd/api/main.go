@@ -18,7 +18,7 @@ func main() {
 	var conf appconfig.AppConfig
 	err := config.Load(&conf, "configs/config.yaml")
 
-	s := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", os.Getenv("RDS_USERNAME"), os.Getenv("RDS_USERNAME"), os.Getenv("RDS_HOSTNAME"), os.Getenv("RDS_PORT"), os.Getenv("RDS_DB_NAME"))
+	s := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", os.Getenv("RDS_USERNAME"), os.Getenv("RDS_PASSWORD"), os.Getenv("RDS_HOSTNAME"), os.Getenv("RDS_PORT"), os.Getenv("RDS_DB_NAME"))
 	db, err := sql.Open("postgres", s)
 	if err != nil {
 		log.Printf("failed to connect to postgres db: %v", err)
@@ -36,5 +36,6 @@ func main() {
 		return c.SendString(message)
 	})
 
-	app.Listen(":8080")
+	addr := fmt.Sprintf(":%d", conf.Port)
+	app.Listen(addr)
 }
