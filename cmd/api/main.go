@@ -2,8 +2,10 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gopher-lib/config"
@@ -16,9 +18,10 @@ func main() {
 	var conf appconfig.AppConfig
 	err := config.Load(&conf, "configs/config.yaml")
 
-	db, err := sql.Open("postgres", conf.PostgresConnStr)
+	s := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", os.Getenv("RDS_USERNAME"), os.Getenv("RDS_USERNAME"), os.Getenv("RDS_HOSTNAME"), os.Getenv("RDS_PORT"), os.Getenv("RDS_DB_NAME"))
+	db, err := sql.Open("postgres", s)
 	if err != nil {
-		log.Fatalf("failed to connect to postgres db: %v", err)
+		log.Printf("failed to connect to postgres db: %v", err)
 	}
 	defer db.Close()
 
